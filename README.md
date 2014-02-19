@@ -1,4 +1,4 @@
-#Relying party On-boarding
+#Relying Party On-boarding
 
 ##RP On-boarding Guide v0.6
 
