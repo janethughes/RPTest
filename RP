@@ -1,0 +1,48 @@
+#	Service Provider Quick Start
+#	Overview
+A Service Provider allows authenticated individuals to interact with a government service online. 
+Service Providers will interact with a single logical identity provider in the form of the hub service. When the service provider wishes to authenticate an individual an authentication request will be constructed by the service provider and sent to the hub service’s identity provider interface. 
+The hub service will orchestrate the authentication process resulting in a SAML <Response> message being sent to the requesting service provider.  
+Service providers will also need to specify a Service Provider Matching Service (see section 5) to complete the identification of an individual.
+##Key Requirements
+
+The following is a list of all the technical requirements for integrating a service with IDA. These requirements are high level and each requirement is supported by technical documentation that gives specific details on meeting the requirement. 
+Accreditation and commercial requirements are covered in Framework documentation available from the IDAP programme management office on request. 
+The service provider will be expected to:
+•	Build a matching service based on the Identity Assurance SAML profile OR build a matching service that integrates with the Identity Assurance team-provided matching service adaptor (MSA)
+•	Manage cryptographic keys used for signing and encryption
+•	Provide endpoints for authentication requests
+•	Configure Firewalls to connect to necessary environments.
+•	Build/Procure implementation of the Identity Assurance SAML profile to send authentication requests and receive authentication responses.
+•	Provide details of required self-asserted attributes for matching.
+•	Engaging in test environment and carrying out necessary tests
+•	The Identity Assurance team will provide:
+o	Test environments to support interoperability testing with the Hub. 
+o	Access to a Public Key Infrastructure used to sign cryptographic keys
+o	Provide the ability for the service provider to create test users to be used in the testing process.
+o	Provide a SAML adaptor that integrates into the service provider’s matching service and translates SAML into a common data language (JSON) if required.
+
+##Specific Requirements:
+•	Send authentication requests and receive authentication responses from the Identity Assurance Hub.
+•	Provide public keys and endpoints for authentication requests.
+
+#Registering with the IDA Hub Service
+Service Providers must first contact the IDA programme team within GDS in order to utilise identity assurance though the IDA hub service. Once a new service provider has performed a satisfactory risk assessment of their transaction(s), and has completed an inception process with GDS, the IDA programme team will arrange access to the test environments. 
+
+###Metadata transfer
+Service providers will be required to provide metadata for the SP itself and any associated matching service used by the SP. 
+This metadata can be sent directly to the IDA service provider support team via email (rpsupport@digital.cabinet-office.gov.uk), including information such as entity id, public certs, response endpoint, matching process, and matching service adapter entity id. Metadata will then be uploaded to the federation hub service by the support team. 
+The matching service adapter (MSA) has its own metadata that will also need to be sent to the IDA service provider support team. To simplify this requirement we request that SPs use the metadata endpoint on the MSA itself to generate metadata based on how the service provider has the configured the software. Accessing /matching-service/SAML2/metadata on the MSA once configured should create the relevant metadata file. 
+
+###Relying Party Test Hub Service
+The test hub is a service supported by the Ida Delivery Team that supports SAML interoperability testing with all integrating partners for the GDS Hub. This example is focused on the functionality and operating of the test hub for Relying Parties (RPs), as required by Service Providers. 
+The Test Hub relying party functionality has a fundamentally different approach than the Test Hub identity provider functionality. As the testing is meant to focus on SAML integration, the Test Hub provides a mechanism for the RPs to send a number of different canned responses to their service. The Test Hub ignores all interactions with the Matching Service and instead, using the information provided in the initial post, generates the assertion that would be provided by the matching service. There will be a separate part of Test Hub functionality that will support the Matching Service SAML integration.
+In order to support this, the RP needs to send all the pieces of information required to generate a response to the Test Hub via a JSON post. These details include: entity id, assertion consumer service url, signing public certificate, encryption public cert, expected pid, matching service entity id and matching service signing private certificate. Note that this data is persisted in memory which means that, until the next deployment, you don't need to resubmit this data. We would suggest that you consider resubmitting the data for each test run, but not between each test case.
+The RP can consume the HUB's metadata via https://test-hub.reference.ida.digital.cabinet-office.gov.uk/SAML2/metadata/sp (use Accept:application/samlmetadata+xml to get xml and Accept:application/json to get json format) - using this, the RP can set up their environment to point at the reference environment. Once the RP is set up, any SAML requests will be consumed by the Test Hub. Upon receiving a request the Test Hub will validate the request and display "PASSED" or "FAILED" and any additional messages that relate to the issues encountered.
+At this point, the user can select the link responseGeneratorLocation, this will bring up a JSON document with a set of 'test cases'. When the executeUri link is selected, the appropriate SAML response will be sent to the service and the expected behaviour of the service can be validated.
+
+###Usage
+It is strongly recommended that you consider using a JSONview plugin for your browser for a better experience.
+1. POST the following JSON (via Advanced Rest Client or curl or similar) to https://test-hub.reference.ida.digital.cabinet-office.gov.uk/rp-test-data 
+
+
