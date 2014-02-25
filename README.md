@@ -8,6 +8,9 @@ The [Identity Assurance Hub Service SAML v2.0 Profile](https://www.gov.uk/govern
 
 This document describes how (????)[Service Providers], Identity Providers and Matching Service Providers can gain access to the hub service as part of an on-boarding process with the IDA service. 
 
+#[Service provider Quick Start Guide](https://github.com/ianimeson/RPTest/blob/master/Service%20Provider)
+
+
 #[Tokening Service](https://github.com/ianimeson/RPTest/blob/master/Tokening%20Service)
 
 ##Overview
