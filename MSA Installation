@@ -1,0 +1,62 @@
+**The Matching Service Adapter (MSA) is distributed as a .jar and must be installed on a target system complying to the above dependencies. 
+
+tar -xf matching-service-adapter-XXX.tar.gz
+tar -xf matching-service-adapter-X.X.XXX.zip
+mv ida_truststore.ts [path to trust store dir]
+java -jar matching-service-adapter.jar server [path to configuration file].yml
+
+
+**When starting the MSA it is important that a YAML configuration file (configuration.yml) is passed as input, and example of how to create a typical configuration file can be seen below.
+
+assertionLifetime: 60m
+matchingServiceUri: [Matching Service URI]
+matchingServiceAdapterLocation: [Matching Service Location URI]
+
+
+http:
+  port: [jetty port]
+  adminPort: [admin port]
+
+saml:
+  entityId: [matching service entity id]
+
+httpClient:
+  timeout: 2s
+  timeToLive: 10m
+  cookiesEnabled: false
+  connectionTimeout: 1s
+
+metadataUri: https://www.rptest1.signin.service.gov.uk/SAML2/metadata/sp  # location to fetch hub metadata from (can be file URL)
+
+acceptSelfSignedCerts: true
+
+serviceInfo:
+  name: matching-service-adapter
+
+privateSigningKeyConfiguration:
+  keyUri: /[path to private key].pk8
+
+privateEncryptionKeyConfiguration:
+  keyUri: /[path to private key].pk8
+
+publicSigningKeyConfiguration:
+  keyUri: /[path to pub key].crt
+  keyName: [key name]
+
+publicEncryptionKeyConfiguration:
+  keyUri: /[path to pub key].crt
+  keyName: [key name]
+
+logstashFormat: false
+
+returnStackTraceInResponse: true
+
+clientTrustStoreConfiguration:
+  storeUri: /[path to trust store dir]/ida_truststore.ts
+  password: puppet
+
+featureFlagConfiguration:
+  encryptionDisabled: [true|false]
+  isCertificateChainValidationRequired: true
+
+logLevel: INFO
