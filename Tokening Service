@@ -1,11 +1,59 @@
 #Tokening Service
 
-##Next Title
-djfhgkdfgjkdfglk
-bdfjzgbvmkjdafhg
+##Example requests
+
+Generate a token
+
+POST to /tokens/generate
 
 
+{
+  "numberOfTokens": 55
+}
+Response
 
 
+{
+  "tokens": [
+    {
+      "token": "asda3243fads"
+    },
+    {
+      "token": "ewrad331fa33"
+    },
+    ...
+  ]
+}
+Validate a token
+POST to /tokens/{token}/validate With an Empty Message
+Response (If the token is valid)
 
-nhkdjshbfgvn
+
+{
+  "valid": true
+}
+Response (If the token is invalid)
+
+
+{
+  "valid": false,
+  "reason": "EXPIRED"
+}
+The invalid reason will be a string, one of "EXPIRED", "REVOKED" or "OVERUSE".
+Response (if the token is missing) http 404
+Response (if the token is not 12 alpha numeric characters) http 400
+Revoke a token
+Post to /tokens/{token}/revoke The revokedReason message can be any string up to 1000 characters.
+
+
+{
+  "revokedReason": "revoked due to fraud."
+}
+Response:
+
+
+{
+  "successful": true
+}
+
+
